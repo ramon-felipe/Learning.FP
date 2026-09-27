@@ -1,0 +1,43 @@
+# Build artifacts
+[Bb]in/
+[Oo]bj/
+[Dd]ebug/
+[Rr]elease/
+
+# Visual Studio / .NET
+.vs/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+*.dbmdl
+*.jfm
+*.pdb
+*.cache
+*.log
+
+# Test results
+TestResults/
+*.trx
+
+# NuGet
+packages/
+*.nupkg
+*.snupkg
+*.nuspec
+
+# Rider / JetBrains
+.idea/
+*.iml
+
+# OS files
+Thumbs.db
+Desktop.ini
+
+# Local environment
+.env
+.env.*
+
+# Temporary files
+*.tmp
+*.temp

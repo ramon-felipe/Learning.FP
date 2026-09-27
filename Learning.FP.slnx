@@ -1,0 +1,8 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="Learning.FP.Console/Learning.FP.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="Learning.FP.Tests/Learning.FP.Tests.csproj" Id="9520d93b-83e5-4ed5-b7e7-3fd084777d32" />
+  </Folder>
+</Solution>
