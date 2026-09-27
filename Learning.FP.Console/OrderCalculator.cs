@@ -1,8 +1,12 @@
-﻿public static class OrderCalculator
+﻿namespace Learning.FP;
+
+public static class OrderCalculator
 {
     public static decimal CalculateTotal(IEnumerable<Product> products)
     {
-        // return products.Sum(p => p.Price);
-        return products.Select(product => product.Price).Aggregate(seed: 0m, (total, price) => total + price);
+        return products
+            .Select(product => product.Price)
+            .Where(price => price > 0)
+            .Aggregate(seed: 0m, (total, price) => total + price);
     }
 }

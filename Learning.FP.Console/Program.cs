@@ -1,11 +1,19 @@
-﻿Console.WriteLine("Learning.FP");
+﻿using Learning.FP;
 
-var apple = new Product("Apple", 1.20m);
-var bread = new Product("Bread", 2.50m);
-var milk = new Product("Milk", 1.8m);
+var products = GetProducts();
 
-var products = new List<Product> { apple, bread, milk };
+var total1 = OrderCalculator.CalculateTotal(products);
+var total2 = OrderCalculator.CalculateTotal(products);
+var total3 = OrderCalculator.CalculateTotal(products);
 
-var totalPrice = OrderCalculator.CalculateTotal(products);
+IEnumerable<Product> GetProducts()
+{
+    Console.WriteLine("Loading products...");
+    yield return new Product("Apple", 1.20m);
+    yield return new Product("Bread", 2.50m);
+    yield return new Product("Bread", 2.50m);
+}
 
-Console.WriteLine($"Total Price: {totalPrice:F2}");
+Console.WriteLine($"Total 1: {total1}");
+Console.WriteLine($"Total 2: {total2}");
+Console.WriteLine($"Total 3: {total3}");

@@ -1,4 +1,6 @@
-﻿public sealed class Product
+﻿namespace Learning.FP;
+
+public sealed class Product
 {
     public string Name { get; }
     public decimal Price { get; }
