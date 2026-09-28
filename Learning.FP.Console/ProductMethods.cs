@@ -8,6 +8,11 @@ public static class ProductMethods
         return product.Price;
     }
 
+    public static bool IsPaidProduct(Product product)
+    {
+        return product.Price > 0;
+    }
+
     // impure function
     public static decimal GetPriceWithLogging(Product product)
     {

@@ -5,8 +5,13 @@ public static class OrderCalculator
     public static decimal CalculateTotal(IEnumerable<Product> products)
     {
         return products
-            .Select(product => product.Price)
-            .Where(price => price > 0)
-            .Aggregate(seed: 0m, (total, price) => total + price);
+            .Where(ProductMethods.IsPaidProduct)
+            .Select(ProductMethods.GetPrice)
+            .Aggregate(seed: 0m, Add);
+    }
+
+    private static decimal Add(decimal total, decimal price)
+    {
+        return total + price;
     }
 }
