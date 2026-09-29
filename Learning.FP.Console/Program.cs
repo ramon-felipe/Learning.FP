@@ -1,5 +1,9 @@
 ﻿using Learning.FP;
 
+var forThreshold = CostIsGreaterThan();
+var expensiveProduct = forThreshold(5m);
+var result = expensiveProduct(new Product("Apple", 1.20m));
+
 var addTax23 = TaxCalculator.CreateTaxCalculator(1.23m);
 var addTax33 = TaxCalculator.CreateTaxCalculator(1.33m);
 var priceWith23 = addTax23(100m);
@@ -25,27 +29,12 @@ Console.WriteLine($"Total 1: {total1}");
 Console.WriteLine($"Total 2: {total2}");
 Console.WriteLine($"Total 3: {total3}");
 
-static decimal GetPriceWithTax(Product product)
+
+static Func<decimal, bool> IsGreaterThan(decimal threshold)
 {
-    var addTaxFunc = TaxCalculator.CreateTaxCalculator(1.23m);
-    return addTaxFunc(GetPrice(product));
+    return value => value > threshold;
 }
 
-static decimal GetPriceWithTax2(Product product)
-{
-    // manual composition
-    return AddTax(GetPrice(product));
-}
-
-// pure function
-// deterministic: given the same input, it will always return the same output
-// no side effects: it does not modify any external state or have any observable effects outside of returning a value
-static decimal GetPrice(Product product)
-{
-    return product.Price;
-}
-
-static decimal AddTax(decimal price)
-{
-    return price * 1.23m;
-}
+static Func<decimal, Func<Product, bool>> CostIsGreaterThan()
+    => threshold =>
+        product => product.Price > threshold;

@@ -140,4 +140,19 @@ public class Tests
         // Assert
         Assert.That(totalPrice, Is.EqualTo(5.50m));
     }
+
+    [Test]
+    public void TestComposeFunction()
+    {
+        // Arrange
+        Func<string, int> funcA = s => s.Length;
+        Func<int, bool> funcB = length => length > 5;
+        
+        // Act
+        var composed = OrderCalculator.Compose(funcA, funcB);
+
+        // Assert
+        Assert.That(composed("Hello!!"), Is.True);
+        Assert.That(composed("Hi"), Is.False);
+    }
 }
