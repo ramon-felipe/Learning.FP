@@ -18,3 +18,11 @@ public static class OrderCalculator
         return total + price;
     }
 }
+
+public static class TaxCalculator
+{
+    public static Func<decimal, decimal> CreateTaxCalculator(decimal taxRate)
+    {
+        return price => price * taxRate;
+    }
+}

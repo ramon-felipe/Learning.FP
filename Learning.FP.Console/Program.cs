@@ -1,5 +1,12 @@
 ﻿using Learning.FP;
 
+var addTax23 = TaxCalculator.CreateTaxCalculator(1.23m);
+var addTax33 = TaxCalculator.CreateTaxCalculator(1.33m);
+var priceWith23 = addTax23(100m);
+var priceWith33 = addTax33(100m);
+
+var x = addTax23(10m);
+
 var products = GetProducts();
 
 var total1 = OrderCalculator.CalculateTotal(products);
@@ -19,6 +26,12 @@ Console.WriteLine($"Total 2: {total2}");
 Console.WriteLine($"Total 3: {total3}");
 
 static decimal GetPriceWithTax(Product product)
+{
+    var addTaxFunc = TaxCalculator.CreateTaxCalculator(1.23m);
+    return addTaxFunc(GetPrice(product));
+}
+
+static decimal GetPriceWithTax2(Product product)
 {
     // manual composition
     return AddTax(GetPrice(product));
