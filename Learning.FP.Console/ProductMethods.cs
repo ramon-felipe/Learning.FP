@@ -13,6 +13,11 @@ public static class ProductMethods
         return product.Price > 0;
     }
 
+    public static Func<Product, bool> CostIsGreaterThan(decimal threshold)
+    {
+        return product => product.Price > threshold;        
+    }
+
     // impure function
     public static decimal GetPriceWithLogging(Product product)
     {
