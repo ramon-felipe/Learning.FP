@@ -3,6 +3,8 @@
 var price = new Maybe<decimal>(100m);
 
 var resultMap = FunctionalMethods.Map(price, OrderCalculator.AddTax);
+var maybeDiscount = FunctionalMethods.Map(price, ProductMethods.ApplyDiscount);
+var maybeDiscount2 = FunctionalMethods.Bind(price, ProductMethods.ApplyDiscount);
 
 // ---------------
 
