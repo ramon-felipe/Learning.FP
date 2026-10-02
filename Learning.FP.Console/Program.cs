@@ -1,5 +1,11 @@
 ﻿using Learning.FP;
 
+var price = new Maybe<decimal>(100m);
+
+var resultMap = FunctionalMethods.Map(price, OrderCalculator.AddTax);
+
+// ---------------
+
 var forThreshold = CostIsGreaterThan();
 var expensiveProduct = forThreshold(5m);
 var result = expensiveProduct(new Product("Apple", 1.20m));
@@ -38,3 +44,12 @@ static Func<decimal, bool> IsGreaterThan(decimal threshold)
 static Func<decimal, Func<Product, bool>> CostIsGreaterThan()
     => threshold =>
         product => product.Price > threshold;
+
+
+static Maybe<decimal> ApplyDiscount(decimal price)
+{
+    if (price < 10m)
+        return new Maybe<decimal>(price);
+
+    return new Maybe<decimal>(price * 0.9m);
+}

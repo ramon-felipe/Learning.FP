@@ -19,7 +19,7 @@ public static class OrderCalculator
         return total + price;
     }
 
-    private static decimal AddTax(decimal price)
+    public static decimal AddTax(decimal price)
     {
         return price * 1.23m;
     }
