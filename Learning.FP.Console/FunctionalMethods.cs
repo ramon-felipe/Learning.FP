@@ -6,7 +6,12 @@ public static class FunctionalMethods
         Maybe<A> maybe,
         Func<A, B> function)
     {
-        return new Maybe<B>(function(maybe.Value));
+        if (maybe.HasNoValue)
+        {
+            return Maybe<B>.None;
+        }
+
+        return Maybe<B>.From(function(maybe.Value));
     }
 
     public static Maybe<B> Bind<A, B>(

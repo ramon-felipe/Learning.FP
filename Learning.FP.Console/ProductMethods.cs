@@ -28,9 +28,9 @@ public static class ProductMethods
     public static Maybe<decimal> ApplyDiscount(decimal price)
     {
         if (price < 10m)
-            return new Maybe<decimal>(price);
+            return Maybe.From(price);
 
-        return new Maybe<decimal>(price * 0.9m);
+        return Maybe.From(price * 0.9m);
     }
 
 }

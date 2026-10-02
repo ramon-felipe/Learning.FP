@@ -1,8 +1,12 @@
 ﻿using Learning.FP;
 
-var price = new Maybe<decimal>(100m);
+// --------
+decimal? nullDecimal = null;
+var test = Maybe<decimal>.None;
 
-var resultMap = FunctionalMethods.Map(price, OrderCalculator.AddTax);
+var price = Maybe.From(100m);
+    
+var resultMap = FunctionalMethods.Map(test, OrderCalculator.AddTax);
 var maybeDiscount = FunctionalMethods.Map(price, ProductMethods.ApplyDiscount);
 var maybeDiscount2 = FunctionalMethods.Bind(price, ProductMethods.ApplyDiscount);
 
@@ -51,7 +55,7 @@ static Func<decimal, Func<Product, bool>> CostIsGreaterThan()
 static Maybe<decimal> ApplyDiscount(decimal price)
 {
     if (price < 10m)
-        return new Maybe<decimal>(price);
+        return Maybe<decimal>.From(price);
 
-    return new Maybe<decimal>(price * 0.9m);
+    return Maybe<decimal>.From(price * 0.9m);
 }
