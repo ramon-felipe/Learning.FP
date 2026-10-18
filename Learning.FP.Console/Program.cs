@@ -2,6 +2,22 @@
 using LanguageExt;
 
 
+Either<string, decimal> successfulPrice =
+    Either<string, decimal>.Right(90m);
+
+Either<string, decimal> failedPrice =
+    Either<string, decimal>.Left("Price must be positive");
+
+var successfulWithTax = successfulPrice.Map(OrderCalculator.AddTax);
+var failedWithTax = failedPrice.Map(OrderCalculator.AddTax);
+var failedWithContext = failedWithTax.MapLeft(
+    error => $"Validation error: {error}");
+
+var finalPrice = successfulPrice.Bind(Operations.ApplyDiscountEither).Map(OrderCalculator.AddTax);
+var finalFailedPrice = failedPrice.Bind(Operations.ApplyDiscountEither).Map(OrderCalculator.AddTax);
+
+// -------------
+
 var optSome = Option<decimal>.Some(10m);
 var optNone = Option<decimal>.None;
 
