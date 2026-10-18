@@ -24,6 +24,11 @@ public static class OrderCalculator
         return price * 1.23m;
     }
 
+    public static Maybe<decimal> ApplyDiscount(decimal price)
+    {
+        return Maybe.From(price * 0.9m);
+    }
+
     private static decimal GetPriceWithTax(Product product)
     {
         var addTaxFunc = TaxCalculator.CreateTaxCalculator(1.23m);

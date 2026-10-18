@@ -5,8 +5,14 @@ decimal? nullDecimal = null;
 var test = Maybe<decimal>.None;
 
 var price = Maybe.From(100m);
-    
+
+var discount = FunctionalMethods.Bind(price, OrderCalculator.ApplyDiscount);
+var discountAddedTax = FunctionalMethods.Map(discount, OrderCalculator.AddTax);
+
+// ----
+
 var resultMap = FunctionalMethods.Map(test, OrderCalculator.AddTax);
+var resultMapBind = FunctionalMethods.Bind(resultMap, ProductMethods.ApplyDiscount);
 var maybeDiscount = FunctionalMethods.Map(price, ProductMethods.ApplyDiscount);
 var maybeDiscount2 = FunctionalMethods.Bind(price, ProductMethods.ApplyDiscount);
 

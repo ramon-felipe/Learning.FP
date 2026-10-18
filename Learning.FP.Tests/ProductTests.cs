@@ -155,4 +155,6 @@ public class Tests
         Assert.That(composed("Hello!!"), Is.True);
         Assert.That(composed("Hi"), Is.False);
     }
+
+
 }
