@@ -1,4 +1,6 @@
 ﻿namespace Learning.FP;
+
+using LanguageExt;
 using static Learning.FP.ProductMethods;
 public static class OrderCalculator
 {
@@ -42,12 +44,4 @@ public static class OrderCalculator
         return product => second(first(product));
     }
 
-}
-
-public static class TaxCalculator
-{
-    public static Func<decimal, decimal> CreateTaxCalculator(decimal taxRate)
-    {
-        return price => price * taxRate;
-    }
 }

@@ -1,4 +1,15 @@
 ﻿using Learning.FP;
+using LanguageExt;
+
+
+var optSome = Option<decimal>.Some(10m);
+var optNone = Option<decimal>.None;
+
+var optSomeWithTax = optSome.Map(OrderCalculator.AddTax);
+var optNoneWithTax = optNone.Map(OrderCalculator.AddTax);
+
+var optSomeWithDiscount = optSome.Bind(Operations.ApplyDiscount).Map(OrderCalculator.AddTax);
+var optNoneWithDiscount = optNone.Bind(Operations.ApplyDiscount).Map(OrderCalculator.AddTax);
 
 // --------
 decimal? nullDecimal = null;
