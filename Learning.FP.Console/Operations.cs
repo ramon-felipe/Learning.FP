@@ -11,10 +11,15 @@ public static class Operations
             : Option<decimal>.None;
     }
 
-    public static Either<string, decimal> ApplyDiscountEither(decimal price)
+    public static Either<PriceValidationError, decimal> ApplyDiscountEither(decimal price)
     {
-        return price > 0
-            ? Either<string, decimal>.Right(price * 0.9m)
-            : Either<string, decimal>.Left("Price must be positive");
+        return price > 100m
+            ? Either<PriceValidationError, decimal>.Right(price * 0.9m)
+            : Either<PriceValidationError, decimal>.Left(PriceValidationError.DiscountNotApplicable);
     }
+
+    public static Either<PriceValidationError, decimal> ValidatePrice(decimal price) =>
+        price > 0
+            ? Either<PriceValidationError, decimal>.Right(price)
+            : Either<PriceValidationError, decimal>.Left(PriceValidationError.InvalidPrice);
 }

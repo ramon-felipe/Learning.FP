@@ -1,12 +1,11 @@
 ﻿using Learning.FP;
 using LanguageExt;
 
+Either<PriceValidationError, decimal> successfulPrice =
+    Either<PriceValidationError, decimal>.Right(90m);
 
-Either<string, decimal> successfulPrice =
-    Either<string, decimal>.Right(90m);
-
-Either<string, decimal> failedPrice =
-    Either<string, decimal>.Left("Price must be positive");
+Either<PriceValidationError, decimal> failedPrice =
+    Either<PriceValidationError, decimal>.Left(PriceValidationError.InvalidPrice);
 
 var successfulWithTax = successfulPrice.Map(OrderCalculator.AddTax);
 var failedWithTax = failedPrice.Map(OrderCalculator.AddTax);
