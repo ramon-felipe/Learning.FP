@@ -17,4 +17,9 @@ public static class Operations
             ? Either<string, decimal>.Right(price * 0.9m)
             : Either<string, decimal>.Left("Price must be positive");
     }
+
+    public static Either<PriceValidationError, decimal> ValidatePrice(decimal price) =>
+        price > 0
+            ? Either<PriceValidationError, decimal>.Right(price)
+            : Either<PriceValidationError, decimal>.Left(PriceValidationError.InvalidPrice);
 }

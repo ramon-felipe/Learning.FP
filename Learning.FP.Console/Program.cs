@@ -1,7 +1,6 @@
 ﻿using Learning.FP;
 using LanguageExt;
 
-
 Either<string, decimal> successfulPrice =
     Either<string, decimal>.Right(90m);
 
