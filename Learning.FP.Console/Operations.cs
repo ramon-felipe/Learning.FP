@@ -22,4 +22,9 @@ public static class Operations
         price > 0
             ? Either<PriceValidationError, decimal>.Right(price)
             : Either<PriceValidationError, decimal>.Left(PriceValidationError.InvalidPrice);
+
+    public static Either<PriceValidationError, decimal> CalculateFinalPrice(decimal price) =>
+        ValidatePrice(price)
+        .Bind(ApplyDiscountEither)
+        .Map(OrderCalculator.AddTax);
 }
