@@ -11,15 +11,20 @@ public static class Operations
             : Option<decimal>.None;
     }
 
+    public static Either<PriceValidationError, decimal> CalculateFinalPrice(decimal price) =>
+        ValidatePrice(price)
+        .Bind(ApplyDiscountEither)
+        .Map(OrderCalculator.AddTax);
+
+    public static Either<PriceValidationError, decimal> ValidatePrice(decimal price) =>
+        price > 0
+            ? Either<PriceValidationError, decimal>.Right(price)
+            : Either<PriceValidationError, decimal>.Left(PriceValidationError.InvalidPrice);
+
     public static Either<PriceValidationError, decimal> ApplyDiscountEither(decimal price)
     {
         return price > 100m
             ? Either<PriceValidationError, decimal>.Right(price * 0.9m)
             : Either<PriceValidationError, decimal>.Left(PriceValidationError.DiscountNotApplicable);
     }
-
-    public static Either<PriceValidationError, decimal> ValidatePrice(decimal price) =>
-        price > 0
-            ? Either<PriceValidationError, decimal>.Right(price)
-            : Either<PriceValidationError, decimal>.Left(PriceValidationError.InvalidPrice);
 }

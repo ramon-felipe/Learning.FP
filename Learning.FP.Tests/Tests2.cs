@@ -85,5 +85,44 @@ public sealed class Tests2
         }
     }
 
+    [Test]
+    public void CalculateFinalPrice_ShouldReturnFinalPrice_WhenPriceIsEligible()
+    {
+        var result = Operations.CalculateFinalPrice(150m);
+
+        var actual = result.Match(
+            Right: price => price,
+            Left: _ => -1m);
+
+        Assert.That(result.IsRight, Is.True);
+        Assert.That(actual, Is.EqualTo(166.05m));
+    }
+
+    [Test]
+    public void CalculateFinalPrice_ShouldReturnInvalidPrice_WhenPriceIsZero()
+    {
+        var result = Operations.CalculateFinalPrice(0m);
+
+        var actual = result.Match(
+            Right: _ => (PriceValidationError?)null,
+            Left: error => error);
+
+        Assert.That(result.IsLeft, Is.True);
+        Assert.That(actual, Is.EqualTo(PriceValidationError.InvalidPrice));
+    }
+
+    [Test]
+    public void CalculateFinalPrice_ShouldReturnDiscountNotApplicable_WhenPriceIsTooLow()
+    {
+        var result = Operations.CalculateFinalPrice(50m);
+
+        var actual = result.Match(
+            Right: _ => (PriceValidationError?)null,
+            Left: error => error);
+
+        Assert.That(result.IsLeft, Is.True);
+        Assert.That(actual, Is.EqualTo(PriceValidationError.DiscountNotApplicable));
+    }
+
     private static bool IsEven(int number) => number % 2 == 0;
 }
