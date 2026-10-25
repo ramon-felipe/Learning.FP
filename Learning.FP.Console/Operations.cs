@@ -36,4 +36,8 @@ public static class Operations
                     Right: discountedPrice => Either<PriceValidationError, decimal>.Right(discountedPrice),
                     Left: _ => Either<PriceValidationError, decimal>.Right(p) // If discount not applicable, return original price
             ));
+
+    public static Either<string, decimal> CalculateFinalPriceWithErrorMessage(decimal price) =>
+        CalculateFinalPrice(price)
+            .MapLeft(error => $"{error.Code}: {error.Message}");
 }

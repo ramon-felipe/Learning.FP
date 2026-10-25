@@ -15,7 +15,6 @@ public sealed class Tests2
         var evenNumbers = numbers
             .Where(_ => _ % 2 == 0)
             .Where(_ => _ > min);
-
     }
 
     [Test]
@@ -155,6 +154,45 @@ public sealed class Tests2
 
         // Act
         var result = Operations.ApplyOptionalDiscount(price);
+
+        // Arrange
+        result.ShouldBeLeft(error => Assert.That(error, Is.EqualTo(expectedError)));
+    }
+
+    [TestCase(101)]
+    [TestCase(150)]
+    public void CalculateFinalPriceWithErrorMessage_ShouldReturnDiscountedPrice_WhenPriceIsEligible(decimal price)
+    {
+        // Act
+        var result = Operations.CalculateFinalPriceWithErrorMessage(price);
+
+        // Arrange
+        result.ShouldBeRight(_ => Assert.That(_, Is.EqualTo(price * 0.9m * 1.23m)));
+    }
+
+    [TestCase(99)]
+    [TestCase(1)]
+    public void CalculateFinalPriceWithErrorMessage_ShouldReturnDiscountNotApplicable_WhenPriceIsNotValid(decimal price)
+    {
+        // Arrange
+        var expectedError = "DISCOUNT_NOT_APPLICABLE: Discount not applicable for this price";
+
+        // Act
+        var result = Operations.CalculateFinalPriceWithErrorMessage(price);
+
+        // Arrange
+        result.ShouldBeLeft(error => Assert.That(error, Is.EqualTo(expectedError)));
+    }
+
+    [TestCase(-1)]
+    [TestCase(0)]
+    public void CalculateFinalPriceWithErrorMessage_ShouldReturnINVALID_PRICE_WhenPriceIsNotValid(decimal price)
+    {
+        // Arrange
+        var expectedError = "INVALID_PRICE: Price must be positive";
+
+        // Act
+        var result = Operations.CalculateFinalPriceWithErrorMessage(price);
 
         // Arrange
         result.ShouldBeLeft(error => Assert.That(error, Is.EqualTo(expectedError)));
