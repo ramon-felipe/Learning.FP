@@ -1,4 +1,4 @@
-﻿using LanguageExt.UnsafeValueAccess;
+﻿using LanguageExt.UnitTesting;
 
 namespace Learning.FP.Tests;
 
@@ -48,7 +48,7 @@ public sealed class Tests2
         using (Assert.EnterMultipleScope())
         {
             Assert.That(result.IsLeft, Is.True);
-            Assert.That(actual, Is.EqualTo(PriceValidationError.InvalidPrice));
+            Assert.That(actual, Is.EqualTo(new InvalidPriceError("Price must be positive")));
         }
     }
 
@@ -81,7 +81,7 @@ public sealed class Tests2
         using (Assert.EnterMultipleScope())
         {
             Assert.That(result.IsLeft, Is.True);
-            Assert.That(actual, Is.EqualTo(PriceValidationError.DiscountNotApplicable));
+            Assert.That(actual, Is.EqualTo(new DiscountNotApplicableError("Discount not applicable for this price")));
         }
     }
 
@@ -108,7 +108,7 @@ public sealed class Tests2
             Left: error => error);
 
         Assert.That(result.IsLeft, Is.True);
-        Assert.That(actual, Is.EqualTo(PriceValidationError.InvalidPrice));
+        Assert.That(actual, Is.EqualTo(new InvalidPriceError("Price must be positive")));
     }
 
     [Test]
@@ -121,8 +121,42 @@ public sealed class Tests2
             Left: error => error);
 
         Assert.That(result.IsLeft, Is.True);
-        Assert.That(actual, Is.EqualTo(PriceValidationError.DiscountNotApplicable));
+        Assert.That(actual, Is.EqualTo(new DiscountNotApplicableError("Discount not applicable for this price")));
     }
 
-    private static bool IsEven(int number) => number % 2 == 0;
+    [TestCase(101)]
+    [TestCase(150)]
+    public void ApplyOptionalDiscount_ShouldReturnDiscountedPrice_WhenPriceIsEligible(decimal price)
+    {
+        // Act
+        var result = Operations.ApplyOptionalDiscount(price);
+
+        // Arrange
+        result.ShouldBeRight(_ => Assert.That(_, Is.EqualTo(price * 0.9m)));
+    }
+
+    [TestCase(99)]
+    [TestCase(1)]
+    public void ApplyOptionalDiscount_ShouldReturnOriginalPrice_WhenPriceIsNotEligible(decimal price)
+    {
+        // Act
+        var result = Operations.ApplyOptionalDiscount(price);
+
+        // Arrange
+        result.ShouldBeRight(_ => Assert.That(_, Is.EqualTo(price)));
+    }
+
+    [TestCase(-1)]
+    [TestCase(0)]
+    public void ApplyOptionalDiscount_ShouldReturnError_WhenPriceIsNotValid(decimal price)
+    {
+        // Arrange
+        var expectedError = new InvalidPriceError("Price must be positive");
+
+        // Act
+        var result = Operations.ApplyOptionalDiscount(price);
+
+        // Arrange
+        result.ShouldBeLeft(error => Assert.That(error, Is.EqualTo(expectedError)));
+    }
 }

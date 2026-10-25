@@ -1,18 +1,23 @@
 ﻿using Learning.FP;
 using LanguageExt;
 
+
+var finalPrice = Operations.CalculateFinalPrice(150m);
+
+// ------------------------------
+
 Either<PriceValidationError, decimal> successfulPrice =
     Either<PriceValidationError, decimal>.Right(90m);
 
 Either<PriceValidationError, decimal> failedPrice =
-    Either<PriceValidationError, decimal>.Left(PriceValidationError.InvalidPrice);
+    Either<PriceValidationError, decimal>.Left(new InvalidPriceError("Price must be positive"));
 
 var successfulWithTax = successfulPrice.Map(OrderCalculator.AddTax);
 var failedWithTax = failedPrice.Map(OrderCalculator.AddTax);
 var failedWithContext = failedWithTax.MapLeft(
     error => $"Validation error: {error}");
 
-var finalPrice = successfulPrice.Bind(Operations.ApplyDiscountEither).Map(OrderCalculator.AddTax);
+var finalPrice2 = successfulPrice.Bind(Operations.ApplyDiscountEither).Map(OrderCalculator.AddTax);
 var finalFailedPrice = failedPrice.Bind(Operations.ApplyDiscountEither).Map(OrderCalculator.AddTax);
 
 // -------------

@@ -13,18 +13,27 @@ public static class Operations
 
     public static Either<PriceValidationError, decimal> CalculateFinalPrice(decimal price) =>
         ValidatePrice(price)
-        .Bind(ApplyDiscountEither)
-        .Map(OrderCalculator.AddTax);
+            .Bind(ApplyDiscountEither)
+            .Map(OrderCalculator.AddTax);
 
     public static Either<PriceValidationError, decimal> ValidatePrice(decimal price) =>
         price > 0
             ? Either<PriceValidationError, decimal>.Right(price)
-            : Either<PriceValidationError, decimal>.Left(PriceValidationError.InvalidPrice);
+            : Either<PriceValidationError, decimal>.Left(new InvalidPriceError("Price must be positive"));
 
     public static Either<PriceValidationError, decimal> ApplyDiscountEither(decimal price)
     {
         return price > 100m
             ? Either<PriceValidationError, decimal>.Right(price * 0.9m)
-            : Either<PriceValidationError, decimal>.Left(PriceValidationError.DiscountNotApplicable);
+            : Either<PriceValidationError, decimal>.Left(new DiscountNotApplicableError("Discount not applicable for this price"));
     }
+
+    public static Either<PriceValidationError, decimal> ApplyOptionalDiscount(decimal price) =>
+        ValidatePrice(price)
+            .Bind(p => 
+                ApplyDiscountEither(p)
+                .Match(
+                    Right: discountedPrice => Either<PriceValidationError, decimal>.Right(discountedPrice),
+                    Left: _ => Either<PriceValidationError, decimal>.Right(p) // If discount not applicable, return original price
+            ));
 }
