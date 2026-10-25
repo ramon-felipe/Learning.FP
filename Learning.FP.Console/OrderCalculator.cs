@@ -51,6 +51,30 @@ public static class OrderCalculator
             );
     }
 
+    public static Either<string, decimal> CalculateOrderTotalValidation(decimal price, int quantity)
+    {
+        return (ValidatePrice(price), ValidateQuantity(quantity))
+            .Apply((validPrice, validQuantity) => validPrice * validQuantity)
+            .Match(
+                Succ: Either<string, decimal>.Right,
+                Fail: errors => Either<string, decimal>.Left(string.Join("; ", errors.Select(e => e)))
+            );
+    }
+
+    public static Validation<string, decimal> ValidatePrice(decimal price)
+    {
+        return price > 0
+            ? Validation<string, decimal>.Success(price)
+            : Validation<string, decimal>.Fail(Seq.create("Price must be positive"));   
+    }
+
+    public static Validation<string, int> ValidateQuantity(int quantity)
+    {
+        return quantity > 0
+            ? Validation<string, int>.Success(quantity)
+            : Validation<string, int>.Fail(Seq.create("Quantity must be positive"));
+    }
+
     private static decimal Add(decimal total, decimal price)
     {
         return total + price;
