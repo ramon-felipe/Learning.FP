@@ -16,6 +16,41 @@ public static class OrderCalculator
             .Aggregate(seed: 0m, Add);
     }
 
+    public static Either<string, decimal> CalculateOrderTotal(decimal price, int quantity)
+    {
+        var priceValidation = Operations.ValidatePrice(price);
+        var quantityValidation = Operations.ValidateQuantity(quantity);
+
+        if (priceValidation.IsRight && quantityValidation.IsRight)
+            return Either<string, decimal>.Right(price * quantity);
+
+        var priceRes = priceValidation.Match(
+            Right: _ => "",
+            Left: error => error.Message);
+
+        var quantityRes = quantityValidation.Match(
+            Right: _ => "",
+            Left: error => error.Message);
+
+        var errors = new[] { priceRes, quantityRes }
+            .Where(error => !string.IsNullOrEmpty(error));
+
+        return Either<string, decimal>.Left(string.Join("; ", errors));
+    }
+
+    public static Either<string, decimal> CalculateOrderTotalToValidation(decimal price, int quantity)
+    {
+        var priceValidation = Operations.ValidatePrice(price).ToValidation();
+        var quantityValidation = Operations.ValidateQuantity(quantity).ToValidation();
+
+        return (priceValidation, quantityValidation)
+            .Apply((validPrice, validQuantity) => validPrice * validQuantity)
+            .Match(
+                Succ: Either<string, decimal>.Right,
+                Fail: errors => Either<string, decimal>.Left(string.Join("; ", errors.Select(e => e.Message)))
+            );
+    }
+
     private static decimal Add(decimal total, decimal price)
     {
         return total + price;

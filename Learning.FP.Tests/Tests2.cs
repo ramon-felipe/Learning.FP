@@ -197,4 +197,116 @@ public sealed class Tests2
         // Arrange
         result.ShouldBeLeft(error => Assert.That(error, Is.EqualTo(expectedError)));
     }
+
+    [Test]
+    public void CalculateOrderTotal_Should_ReturnAllErrors_When_AllFail()
+    {
+        // Arrange
+        var price = 0m;
+        var quantity = 0;
+
+        // Act
+        var res = OrderCalculator.CalculateOrderTotal(price, quantity);
+
+        // Arrange
+        res.ShouldBeLeft(error => Assert.That(error, Is.EqualTo("Price must be positive; Quantity must be positive")));
+    }
+
+    [Test]
+    public void CalculateOrderTotal_Should_ReturnPriceError_When_OnlyPriceIsInvalid()
+    {
+        // Arrange
+        var price = 0m;
+        var quantity = 1;
+
+        // Act
+        var res = OrderCalculator.CalculateOrderTotal(price, quantity);
+
+        // Arrange
+        res.ShouldBeLeft(error => Assert.That(error, Is.EqualTo("Price must be positive")));
+    }
+
+    [Test]
+    public void CalculateOrderTotal_Should_ReturnQuantityError_When_OnlyQuantityIsInvalid()
+    {
+        // Arrange
+        var price = 10m;
+        var quantity = 0;
+
+        // Act
+        var res = OrderCalculator.CalculateOrderTotal(price, quantity);
+
+        // Arrange
+        res.ShouldBeLeft(error => Assert.That(error, Is.EqualTo("Quantity must be positive")));
+    }
+
+    [Test]
+    public void CalculateOrderTotal_Should_CalculateTotal_When_BothValuesAreValid()
+    {
+        // Arrange
+        var price = 10m;
+        var quantity = 5;
+
+        // Act
+        var res = OrderCalculator.CalculateOrderTotal(price, quantity);
+
+        // Arrange
+        res.ShouldBeRight(total => Assert.That(total, Is.EqualTo(50m)));
+    }
+
+    [Test]
+    public void CalculateOrderTotalToValidation_Should_ReturnAllErrors_When_AllFail()
+    {
+        // Arrange
+        var price = 0m;
+        var quantity = 0;
+
+        // Act
+        var res = OrderCalculator.CalculateOrderTotalToValidation(price, quantity);
+
+        // Arrange
+        res.ShouldBeLeft(error => Assert.That(error, Is.EqualTo("Price must be positive; Quantity must be positive")));
+    }
+
+    [Test]
+    public void CalculateOrderTotalToValidation_Should_ReturnPriceError_When_OnlyPriceIsInvalid()
+    {
+        // Arrange
+        var price = 0m;
+        var quantity = 1;
+
+        // Act
+        var res = OrderCalculator.CalculateOrderTotalToValidation(price, quantity);
+
+        // Arrange
+        res.ShouldBeLeft(error => Assert.That(error, Is.EqualTo("Price must be positive")));
+    }
+
+    [Test]
+    public void CalculateOrderTotalToValidation_Should_ReturnQuantityError_When_OnlyQuantityIsInvalid()
+    {
+        // Arrange
+        var price = 10m;
+        var quantity = 0;
+
+        // Act
+        var res = OrderCalculator.CalculateOrderTotalToValidation(price, quantity);
+
+        // Arrange
+        res.ShouldBeLeft(error => Assert.That(error, Is.EqualTo("Quantity must be positive")));
+    }
+
+    [Test]
+    public void CalculateOrderTotalToValidation_Should_CalculateTotal_When_BothValuesAreValid()
+    {
+        // Arrange
+        var price = 10m;
+        var quantity = 5;
+
+        // Act
+        var res = OrderCalculator.CalculateOrderTotalToValidation(price, quantity);
+
+        // Arrange
+        res.ShouldBeRight(total => Assert.That(total, Is.EqualTo(50m)));
+    }
 }
